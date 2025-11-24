@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+    <h1>{{ task.title }}</h1>
+
+    <p><strong>Due:</strong> {{ task.due_date | default:"No due date" }}</p>
+    <p><strong>Estimated minutes:</strong> {{ task.estimated_minutes|default:"-" }}</p>
+    
+    <div>
+    <strong>Description:</strong><br>
+    {{ task.description|linebreaks }}
+    </div>
+
+    <p><strong>Completed:</strong> {{ task.completed }}</p>
+
+    <p>
+        <a href="{% url 'tasks:task_list' %}">Back to tasks</a>
+    </p>
+</article>
+{% endblock %}

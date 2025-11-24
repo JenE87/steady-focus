@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Tasks</h1>
+
+{% if tasks %}
+    <ul>
+        {% for t in tasks %}
+            <li>
+                <a href="{% url 'tasks:task_detail' t.pk %}">
+                    {{ t.title }}
+                </a>
+                - due {{ t.due_date | default:"No due date" }}
+                
+                {% if t.completed %}
+                    <strong>(completed)</strong>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No tasks entered yet.</p>
+{% endif %}
+
+{% endblock %}
