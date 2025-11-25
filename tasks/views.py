@@ -1,7 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
+from django.views.generic import ListView, DetailView
+from .forms import TaskForm
 from .models import Task
 
 
@@ -26,3 +29,20 @@ def task_detail(request, pk):
         return HttpResponseForbidden("You do not have permission to view this task.")
     
     return render(request, "tasks/task_detail.html", {"task": task})
+
+
+@login_required
+def task_create(request):
+    if request.method == "POST":
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.owner = request.user
+            task.save()
+            messages.success(request, "Task created successfully.")
+            return redirect('tasks:task_list')
+        
+    else:
+        form = TaskForm()
+    
+    return render(request, 'tasks/task_form.html', {'form': form})

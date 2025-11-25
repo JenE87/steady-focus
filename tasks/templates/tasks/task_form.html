@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Create a new task</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="mb-3">
+            {{ form.title.label_tag }}<br>
+            {{ form.title }}
+            {{ form.title.errors }}
+        </div>
+        <div class="mb-3">
+            {{ form.description.label_tag }}<br>
+            {{ form.description }}
+            {{ form.description.errors }}
+        </div>
+        <div class="mb-3">
+            {{ form.estimated_minutes.label_tag }}<br>
+            {{ form.estimated_minutes }}
+            {{ form.estimated_minutes.errors }}
+        </div>
+        <div class="mb-3">
+            {{ form.due_date.label_tag }}<br>
+            {{ form.due_date }}
+            {{ form.due_date.errors }}
+        </div>
+        <div class="mb-3 form-check">
+            {{ form.completed.label_tag }}<br>
+            {{ form.completed }}
+            {{ form.completed.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Task</button>
+        <a href="{% url 'tasks:task_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
