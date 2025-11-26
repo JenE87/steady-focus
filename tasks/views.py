@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 from .forms import TaskForm
 from .models import Task
 
@@ -55,7 +55,8 @@ def task_edit(request, pk):
     """
     task = get_object_or_404(Task, pk=pk)
 
-    if task.owners != request.user:
+    # Owner check
+    if task.owner != request.user:
         return HttpResponseForbidden("You do not have permission to edit this task.")
         
     if request.method == "POST":
@@ -69,7 +70,7 @@ def task_edit(request, pk):
     else:
         form = TaskForm(instance=task)
         
-    return render(request, 'tasks/task_form', {'form': form, 'task': task})
+    return render(request, 'tasks/task_form.html', {'form': form, 'task': task})
 
 @login_required
 def task_delete(request, pk):
@@ -77,7 +78,7 @@ def task_delete(request, pk):
     POST > delete and redirect
     GET > show confirmation page
     """
-    task = get_object_or_404(Task, pk)
+    task = get_object_or_404(Task, pk=pk)
 
     if task.owner != request.user:
         return HttpResponseForbidden("You do not have permission to delete this task.")
@@ -85,6 +86,6 @@ def task_delete(request, pk):
     if request.method == "POST":
         task.delete()
         messages.success(request, "Task deleted successfully.")
-        return redirect('task:task_list')
+        return redirect('tasks:task_list')
     
     return render(request, 'tasks/task_confirm_delete.html', {'task': task})
