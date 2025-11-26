@@ -20,6 +20,9 @@
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto">
           <li class="nav-item"><a class="nav-link" href="{% url 'blog:post_list' %}">Blog</a></li>
+          {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'tasks:task_list' %}">Tasks</a></li>
+          {% endif %}
         </ul>
 
         <ul class="navbar-nav">
