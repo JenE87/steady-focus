@@ -21,7 +21,7 @@ Heroku URL after deployment
 A [GitHub Kanban board](https://github.com/users/JenE87/projects/10) was set up in Git projects to capture User Stories and follow an agile development approach. For this purpose and to track the project's development progress the project board consists of four columns: Backlog, In Progress, In Review/QA and Done.
 
 ## ERD
-<img width="1292" height="634" alt="ERD_Steady_Focus" src="https://github.com/user-attachments/assets/ce44ac46-e8c3-4158-935d-8c8361af689d" />
+<img width="1294" height="644" alt="ERD_Steady_Focus" src="https://github.com/user-attachments/assets/d135b172-f5c1-4189-9678-293390ac86f4" />
 
 ## Technologies
 The following tools and technologies were used to build this project:
@@ -50,6 +50,11 @@ The following tools and technologies were used to build this project:
 
 ## Testing
 ### Manual Testing
+| Feature                           | Test Input                     | Expected Result               | Pass/Fail |
+|-----------------------------------|--------------------------------|-------------------------------|-----------|
+|      |                   |      |       |
+
+
 ### Lighthouse Testing
 ### Validator Testing
 - HTML Validator (W3C)
@@ -68,3 +73,4 @@ The following tools and technologies were used to build this project:
 ## Credits
 ### Code
 ### Content & Media
+
