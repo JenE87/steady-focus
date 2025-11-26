@@ -1,25 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Tasks</h1>
+<h1 class="d-flex justify-content-between align-items-center">
+    Tasks
+    <a href="{% url 'tasks:task_create' %}" class="btn btn-success btn-sm">
+        + Add Task
+    </a>
+</h1>
 
 {% if tasks %}
     <ul>
         {% for t in tasks %}
             <li>
-                <a href="{% url 'tasks:task_detail' t.pk %}">
-                    {{ t.title }}
-                </a>
-                - due {{ t.due_date | default:"No due date" }}
+                <a href="{% url 'tasks:task_detail' t.pk %}">{{ t.title }}</a>
+                {% if t.due_date %} - <small>{{ t.due_date }}</small>{% endif %}
                 
-                {% if t.completed %}
-                    <strong>(completed)</strong>
-                {% endif %}
+                <!-- Edit & delete links -->
+                <span class="ms-2">
+                    <a href="{% url 'tasks:task_edit' t.pk %}" class="text-decoration-non me-2">Edit</a>
+                    <a href="{% url 'tasks:task_delete' t.pk %}" class="text-decoration-none text-danger">Delete</a>
+                </span>
             </li>
         {% endfor %}
     </ul>
 {% else %}
     <p>No tasks entered yet.</p>
+    <a href="{% url 'tasks:task_create' %}" class="btn btn-success btn-sm">+ Create your first task</a>
 {% endif %}
 
 {% endblock %}
