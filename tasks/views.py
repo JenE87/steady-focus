@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseForbidden
 from django.views.generic import ListView
 from .forms import TaskForm
 from .models import Task
@@ -26,7 +25,12 @@ def task_detail(request, pk):
 
     # Deny access if the current user is not the owner
     if task.owner != request.user:
-        return HttpResponseForbidden("You do not have permission to view this task.")
+        return render(
+            request,
+            'errors/403.html',
+            {'message': "You do not have permission to view this task."},
+            status=403
+        )
     
     return render(request, "tasks/task_detail.html", {"task": task})
 
@@ -57,7 +61,12 @@ def task_edit(request, pk):
 
     # Owner check
     if task.owner != request.user:
-        return HttpResponseForbidden("You do not have permission to edit this task.")
+        return render(
+            request,
+            'errors/403.html',
+            {'message': "You do not have permission to edit this task."},
+            status=403
+        )
         
     if request.method == "POST":
         form = TaskForm(request.POST, instance=task)
@@ -81,8 +90,13 @@ def task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
     if task.owner != request.user:
-        return HttpResponseForbidden("You do not have permission to delete this task.")
-    
+        return render(
+            request,
+            'errors/403.html',
+            {'message': "You do not have permission to delete this task."},
+            status=403
+        )
+
     if request.method == "POST":
         task.delete()
         messages.success(request, "Task deleted successfully.")
