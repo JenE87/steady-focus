@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
+from django.views.decorators.http import require_POST
 from .forms import TaskForm
 from .models import Task
 
@@ -51,6 +52,7 @@ def task_create(request):
     
     return render(request, 'tasks/task_form.html', {'form': form})
 
+
 @login_required
 def task_edit(request, pk):
     """
@@ -81,6 +83,7 @@ def task_edit(request, pk):
         
     return render(request, 'tasks/task_form.html', {'form': form, 'task': task})
 
+
 @login_required
 def task_delete(request, pk):
     """
@@ -103,3 +106,33 @@ def task_delete(request, pk):
         return redirect('tasks:task_list')
     
     return render(request, 'tasks/task_confirm_delete.html', {'task': task})
+
+
+@login_required
+@require_POST
+def task_toggle_complete(request, pk):
+    """"
+    Toggle the completed flag for a task (POST only).
+    Only the task owner can toggle.
+    Redirect to task list.
+    """
+    task = get_object_or_404(Task, pk=pk)
+
+    if task.owner != request.user:
+        return render(
+            request,
+            '403.html',
+            {'message': "You do not have permission to modify this task."},
+            status=403
+        )
+    
+    #Toggle and save
+    task.completed = not task.completed
+    task.save()
+
+    if task.completed:
+        messages.success(request, "Task marked as completed.")
+    else:
+        messages.success(request, "Task marked as incomplete.")
+    
+    return redirect('tasks:task_list')

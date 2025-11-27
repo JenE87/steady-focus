@@ -11,15 +11,29 @@
 {% if tasks %}
     <ul>
         {% for t in tasks %}
-            <li>
-                <a href="{% url 'tasks:task_detail' t.pk %}">{{ t.title }}</a>
-                {% if t.due_date %} - <small>{{ t.due_date }}</small>{% endif %}
-                
-                <!-- Edit & delete links -->
+            <li class="mb-2">
+                <!-- Completed tasks are automatically striked through -->
+                <span class="{% if t.completed %}text-decoration-line-through text-muted{% endif %}">
+                    <a href="{% url 'tasks:task_detail' t.pk %}">{{ t.title }}</a>
+                    {% if t.due_date %} - <small>{{ t.due_date }}</small>{% endif %}
+                </span>                    
+                    <!-- Edit & delete links -->
                 <span class="ms-2">
                     <a href="{% url 'tasks:task_edit' t.pk %}" class="text-decoration-non me-2">Edit</a>
                     <a href="{% url 'tasks:task_delete' t.pk %}" class="text-decoration-none text-danger">Delete</a>
                 </span>
+                    
+                {% if t.completed %}
+                <!-- Show badge upon task completion -->
+                <span class="badge bg-success ms-2">Completed</span>
+                {% else %}
+                <form method="post" action="{% url 'tasks:task_toggle' t.pk %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-success btn-sm" title="Mark as complete">
+                        Done?
+                    </button>
+                </form>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>

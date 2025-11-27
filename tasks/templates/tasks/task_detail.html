@@ -21,6 +21,12 @@
         <a href="{% url 'tasks:task_delete' task.pk %}" class="btn btn-danger btn-sm ms-2">
             Delete Task
         </a>
+        <form method="post" action="{% url 'tasks:task_toggle' task.pk %}" class="d-inline">
+        {% csrf_token %}
+        {% if not task.completed %}
+            <button type="submit" class="btn btn-success btn-sm ms-2">Mark as Done</button>
+        {% endif %}
+        </form>
     </div>
 
     <p class="mt-3">
